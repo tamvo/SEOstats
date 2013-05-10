@@ -25,15 +25,25 @@ class SEOstats_OpenSiteExplorer extends SEOstats implements services
 
         $doc = new \DOMDocument();
         @$doc->loadHtml($html);
-		
-		$data = $doc->getElementsByTagName('td');
 
-        return array(
-			'domainAuthority'    => trim(strip_tags($data->item(0)->textContent)),
-            'pageAuthority'      => trim(strip_tags($data->item(1)->textContent)),          
+        $data = $doc->getElementsByTagName('td');
+        $item = $data->item(0);
+
+        if (!empty($item)) {
+          return array(
+            'domainAuthority'    => trim(strip_tags($data->item(0)->textContent)),
+            'pageAuthority'      => trim(strip_tags($data->item(1)->textContent)),
             'linkingRootDomains' => trim(strip_tags($data->item(2)->textContent)),
             'totalInboundLinks'  => trim(strip_tags($data->item(3)->textContent))
-        );
+          );
+        } else {
+          return array(
+            'domainAuthority'    => "N/A",
+            'pageAuthority'      => "N/A",
+            'linkingRootDomains' => "N/A",
+            'totalInboundLinks'  => "N/A"
+          );
+        }
     }
 }
 
